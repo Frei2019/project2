@@ -4,11 +4,12 @@ class ChatCollection:
     def __init__(self):
         self.chats = []
 
-    def add_chat(self, chat):
+    def add_chat(self, chat_name, user):
         """
-        Takes chat of type Chat and appends it to list of chats
+        Takes chat_name and user and appends a new chat to list of chats
         """
-        self.chats.append(chat)
+        # TODO: where and how to check if a chat already exists
+        self.chats.append(Chat(chat_name, user))
 
     def chat_exists(self, name):
         """

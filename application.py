@@ -9,8 +9,10 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 chats = []
+chats = ChatCollection()
 
 if True:
+
     chats.append(Chat("TestChat1", "Bob"))
     chats[-1].add_message(Message("Oh wow, the first chat!", "Alice"))
     chats[-1].add_message(Message("Blub", "Bob"))
@@ -28,6 +30,7 @@ def index():
     """
     display the chat-page given in index.html
     """
+    # TODO: prompt for user name, make sure it is stored in the browser!
     return render_template("index.html", chats=chats)
 
 @socketio.on("submit message")
@@ -43,13 +46,13 @@ def send_message(message):
     Note that the timestamp is taken on the server side!
     """
     # update chats
-    add_to_dict = message["chat"]
+    # TODO
 
     # emit new_message to clients, handle this on client side
     emit("new message", message, broadcast=True)
 
 @socketio.on("add chat")
-def send_message(chat):
+def add_chat(chat):
     """
     socket to receive new chat to be added
     data should be json of shape:
@@ -58,3 +61,4 @@ def send_message(chat):
         ""
     }
     """
+    # TODO
