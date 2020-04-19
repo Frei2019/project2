@@ -1,6 +1,15 @@
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
 <!-- <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 <!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+
+<style media="screen">
+  .table th { text-align: center;}
+  .table { margin: 0 auto;}
+  .table th,.table td { border-width: 0; }
+
+  #content { visibility: hidden;}
+</style>
 
 <head>
 <title>CFrei89 Chat</title>
@@ -10,13 +19,13 @@
   <div class='container'>
     <h1>CFrei89 Chat</h1>
     <form id="userform">
-      <p>All you have to do to get started is input your Username!</p>
+      <h5>All you have to do to get started, is input your Username!</h5>
       <table class="table table-sm mt-5 w-50">
         <tbody>
-          <tr>
+          <tr id="username_row">
             <!-- this will fix the first column to 50% of the w-50 (i.e. 25% of the overall page) -->
             <th style="width: 40%" class="align-middle">Username</th>
-            <td><input class="form-control mr-sm-2" type="username" placeholder="Username" id="username"></td>
+            <td><input class="form-control mr-sm-2" type="username" placeholder="Username" id="username" data-toggle="tooltip" title="Input a username that is longer than 5 characters!"></td>
           </tr>
         </tbody>
       </table>
@@ -35,7 +44,7 @@
       </div>
     </div> --->
     <div id='content' class='row-fluid'>
-    <div class='span2 sidebar'>
+    <div class='span2 sidebar' id='chatlist'>
         <h3>Chats</h3>
         <ul class="nav nav-tabs nav-stacked"> <!--- TODO: Make this dynamic with existing chats --->
           <li><a href='#'>Another Link 1</a></li>
@@ -43,7 +52,7 @@
           <li><a href='#'>Another Link 3</a></li>
         </ul>
       </div>
-      <div class='span10 main'>
+      <div class='span10 main' id='chatarea'>
         <!--- TODO: make this section display the chat history, allow for typing stuff --->
         <h2>Chat History</h2>
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.<p>

@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('username')) {
     document.querySelector('#userform').style.visibility = "hidden";
     document.querySelector('#userform').style.height = "0%";
-    // TODO: make sure that everything is visible, also add, that everything else is invisable!
+    document.querySelector('#content').style.visibility = "visible";
+    reload();
   };
 
   // TODO: make sure the Username is displayed somewhere!
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       userform.style.height = "0%";
     } else {
       // this sets the backgroundColor to red if a username that is to short was input
-      userform.style.backgroundColor = 'red';
+      document.querySelector("#username_row").style.backgroundColor = 'red';
       event.preventDefault();
     };
   };
