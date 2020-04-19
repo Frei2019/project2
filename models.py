@@ -7,9 +7,13 @@ class ChatCollection:
     def add_chat(self, chat_name, user):
         """
         Takes chat_name and user and appends a new chat to list of chats
+        returns 1 if successful, 0 if not (if the chat name is not unique)
         """
-        # TODO: where and how to check if a chat already exists
-        self.chats.append(Chat(chat_name, user))
+        if self.chat_exists(chat_name):
+            return 0
+        else:
+            self.chats.append(Chat(chat_name, user))
+            return 1
 
     def chat_exists(self, name):
         """
@@ -25,18 +29,18 @@ class ChatCollection:
         """
         Takes string and returns the chat with the matching name
         """
-        if chat_exists(name):
-            return [chat for chat in chats if chat.chat_name == name][0]
+        if self.chat_exists(name):
+            return [chat for chat in self.chats if chat.chat_name == name][0]
         else:
             raise ValueError('A chat could not be found when it should have!')
 
-    def add_message(self, message_content, user, chat_name):
+    def add_message(self, chat_name, user, message_content):
         """
         Takes the message content, the user and the chatname (all strings), Adds
         a new message to the appropriate chat
         """
-        if chat_exists(chat_name):
-            chat = get_chat_by_name(chat_name)
+        if self.chat_exists(chat_name):
+            chat = self.get_chat_by_name(chat_name)
             chat.add_message(Message(message_content, user))
         else:
             raise ValueError('A chat could not be found when it should have!')

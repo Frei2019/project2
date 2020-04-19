@@ -8,18 +8,13 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-chats = []
 chats = ChatCollection()
 
 if True:
+    chats.add_chat("TestChat1", "Bob")
+    chats.add_message("TestChat1", "Hello World!", "Bob")
+    chats.add_message("TestChat1", "Hello World yourself!", "Alice")
 
-    chats.append(Chat("TestChat1", "Bob"))
-    chats[-1].add_message(Message("Oh wow, the first chat!", "Alice"))
-    chats[-1].add_message(Message("Blub", "Bob"))
-
-    chats.append(Chat("TestChat1", "Bob"))
-    chats[-1].add_message(Message("Oh wow, the first chat!", "Alice"))
-    chats[-1].add_message(Message("Blub", "Bob"))
 
 # It seems stupid to always send all chats with all messages, not necessary..
 # this could be just sending a "new message notification", the complete thing

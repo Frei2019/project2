@@ -1,14 +1,30 @@
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
 <title>CFrei89 Chat</title>
+<script src=../static/index.js></script>
 </head>
 <body>
   <div class='container'>
     <h1>CFrei89 Chat</h1>
+    <form id="userform">
+      <p>All you have to do to get started is input your Username!</p>
+      <table class="table table-sm mt-5 w-50">
+        <tbody>
+          <tr>
+            <!-- this will fix the first column to 50% of the w-50 (i.e. 25% of the overall page) -->
+            <th style="width: 40%" class="align-middle">Username</th>
+            <td><input class="form-control mr-sm-2" type="username" placeholder="Username" id="username"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <button class="btn btn-light, mt-4">Start Chatting</button>
+      </div>
+    </form>
+
     <!--- <div class='navbar navbar-inverse'>
       <div class='navbar-inner nav-collapse' style="height: auto;">
         <ul class="nav">
