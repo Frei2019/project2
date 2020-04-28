@@ -1,8 +1,12 @@
 from time import time
+import json
 
 class ChatCollection:
     def __init__(self):
         self.chats = []
+
+    def get_chats(self):
+        return self.chats
 
     def add_chat(self, chat_name, user):
         """
@@ -30,25 +34,43 @@ class ChatCollection:
         Takes string and returns the chat with the matching name
         """
         if self.chat_exists(name):
-            return [chat for chat in self.chats if chat.chat_name == name][0]
+            chats = self.get_chats_as_json()
+            return chats.get(name)
         else:
             raise ValueError('A chat could not be found when it should have!')
 
-    def add_message(self, chat_name, user, message_content):
+    def get_chats_as_json(self):
+        """
+        creates dict out of the Chats Object
+        """
+        chats_dict = {}
+        for chat in self.chats:
+            chat_dict = {}
+            i = 0
+            for message in chat.get_messages():
+                message_dict = {}
+                message_dict['content'] = message.content
+                message_dict['user'] = message.user
+                chat_dict[str(message.timestamp)] = message_dict
+            chats_dict[chat.get_name()] = chat_dict
+        return chats_dict
+
+    def add_message(self, chat_name, user, message_content, timestamp=0):
         """
         Takes the message content, the user and the chatname (all strings), Adds
         a new message to the appropriate chat
         """
         if self.chat_exists(chat_name):
-            chat = self.get_chat_by_name(chat_name)
-            chat.add_message(Message(message_content, user))
+            chat = [chat for chat in self.chats if chat.chat_name == chat_name][0]
+            chat.add_message(Message(message_content, user, timestamp))
         else:
             raise ValueError('A chat could not be found when it should have!')
 
+
 class Chat:
-    def __init__(self, chat_name, user):
+    def __init__(self, chat_name, user, timestamp=0):
         self.chat_name = chat_name
-        self.messages = [Message("A new chat was established", user)]
+        self.messages = [Message("A new chat was established", user, timestamp)]
 
     def add_message(self, message):
         """
@@ -63,7 +85,7 @@ class Chat:
         """
         # sorts self.messages by timestamp descending (in place)
         self.messages.sort(key=lambda x: x.timestamp, reverse=True)
-        self.messages = self.messages[:50]
+        self.messages = self.messages[:100]
 
     def last_change(self):
         """
@@ -71,11 +93,26 @@ class Chat:
         """
         return messages[0].get_time()
 
+    def get_name(self):
+        """
+        returns the chat name
+        """
+        return self.chat_name
+
+    def get_messages(self):
+        """
+        returns all messages as list
+        """
+        return self.messages
+
 class Message:
-    def __init__(self, content, user):
+    def __init__(self, content, user, timestamp=0):
         self.content = content
         self.user = user
-        self.timestamp = int(time()*1000)
+        if not timestamp:
+            self.timestamp = int(time()*1000)
+        else:
+            self.timestamp = timestamp
 
     def get_time(self):
         """
