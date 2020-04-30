@@ -11,12 +11,15 @@
   .chatbar {
     position: relative;
     overflow-y: scroll;
-    height: 80vh;
+    height: 75vh;
   }
   .chathistory {
     position: relative;
     overflow-y: scroll;
     height: 77.5vh;
+  }
+  .istypingarea {
+    height: 2.5vh;
   }
   .chatinput {
     height: 5vh;
@@ -38,6 +41,26 @@
 
   .ownmessage, .foreignmessage {
     border-radius: 5px;
+  }
+
+  @keyframes fade {
+            0% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.9;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+  .info {
+    animation-name: fade;
+    animation-duration: 5s;
+    font-style: italic;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
   }
 </style>
 
@@ -71,23 +94,29 @@
     <div id='content' class='row-fluid'>
       <div class='span2 sidebar' id='chatlist'>
         <h5>Chats</h5>
-        <ul class=" chatbar nav nav-tabs">
-          <li>
-          {% for chat in chats %}
-          <a href='#' id={{ chat.get_name() }} class='chat'>{{ chat.get_name() }}</a> <!--- TODO: Make the number dynamic to the unread messages --->
-          {% endfor %}
+        <div class="formgroup">
+          <input class='form-control' id='newchatname' placeholder="Input Name">
+          <button type="button" class="btn btn-light p-2 m-2" id='addchatbutton'>Add Chat</button>
+        </div>
+        <ul class="chatbar nav nav-tabs">
+          <li id='lichatlist'>
+            {% for chat in chats %}
+            <a href='#' id={{ chat.get_name() }} class='chat'>{{ chat.get_name() }}</a> <!--- TODO: Make the number dynamic to the unread messages --->
+            {% endfor %}
           </li>
         </ul>
       </div>
       <div class='span9 main' id='chatarea'>
-        <!--- TODO: allow for typing stuff --->
         <h5 id=chathistorytitle>Chat History</h5>
         <div class="chathistory" id="chathistory">
         </div>
       </div>
+      <div class='span9 main istypingarea' id='istypingarea'>
+        <div class="info" id="istypingfield">
+        </div>
+      </div>
       <form class="chatinput">
       <div class='chatinput span8 main' id='chatinputdiv'>
-        <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
         <input class="form-control" type="text" id='chatinput' placeholder="Chat Here">
       </div>
         <div class="chatbutton span1 main" id="chatbuttondiv">

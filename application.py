@@ -17,7 +17,14 @@ chats.add_chat("Welcome", "Admin")
 sleep(1)
 chats.add_message("Welcome", "Admin", "Welcome to our chat application, friend!")
 
-if True:
+chats.add_chat("Large", "Admin")
+sleep(0.001)
+for i in range(0, 99):
+    chats.add_message("Large", "Admin", str(i))
+    print(i)
+    sleep(0.001)
+
+if False:
     chats.add_chat("TestChat1", "Bob")
     sleep(1)
     chats.add_message("TestChat1", "Bob", "Hello World!")
@@ -25,7 +32,6 @@ if True:
     chats.add_message("TestChat1", "Alice", "Hello World yourself!")
     sleep(1)
     chats.add_message("TestChat1", "cfrei", "Hello World yourself 2!")
-
 
 
 # It seems stupid to always send all chats with all messages, not necessary..
@@ -61,8 +67,6 @@ def send_message(message):
     }
     Note that the timestamp is taken on the server side!
     """
-    # update chats
-    # TODO
     print("message was submitted")
     message = message['message']
     message['timestamp'] = int(time()*1000)
@@ -74,13 +78,27 @@ def send_message(message):
 def add_chat(chat):
     """
     socket to receive new chat to be added
-    data should be json of shape:
+    chat should be json of shape:
     {
         "chatname": "NewChat",
-        ""
+        "author": "Bob"
     }
     """
-    # TODO
+    chat = chat['chat']
+    chats.add_chat(chat['chatname'], chat['author'])
+    emit('new chat', chat, broadcast=True)
+
+@socketio.on("typing")
+def typing(istyping):
+    """
+    socket to receive the information that somebody is typing
+    istyping should be json of shape
+    {
+        "chatname": "NewChat",
+        "author": "Bob"
+    }
+    """
+    emit('user typing', istyping, broadcast=True)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     request.send()
     request.onload = () => {
       const data = JSON.parse(request.responseText);
-      Object.keys(data).forEach(function(element) { // TODO continue here
+      Object.keys(data).forEach(function(element) {
         var arr = data[element]
         add_message(element, arr.content, arr.user)
       })
@@ -80,18 +80,24 @@ document.addEventListener('DOMContentLoaded', () => {
       var hours = d.getHours().toString()
     }
     post.innerHTML = '<b>' + user + '</b>' + '<i>(' + hours + ':' + minutes + ')</i>' + ': ' + content;
-
+    // TODO: add animation
     post_wrapper.appendChild(post)
 
     document.querySelector('#chathistory').append(post_wrapper)
+    // scroll to the bottom of the page
+    var objDiv = document.getElementById("chathistory");
+    objDiv.scrollTop = objDiv.scrollHeight;
   }
+  add_display_link()
 
   // all links in the overview trigger the loading of the history of the selected chat
-  document.querySelectorAll('.chat').forEach(function(button) {
-    button.onclick = function() {
-      get_display_chathistory(button.id);
-    };
-  });
+  function add_display_link() {
+    document.querySelectorAll('.chat').forEach(function(button) {
+      button.onclick = function() {
+        get_display_chathistory(button.id);
+      };
+    });
+  }
 
   // make the enter key work
   var input = document.getElementById("chatinput");
@@ -103,15 +109,36 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       // Trigger the button element with a click
       document.getElementById("sendbutton").click();
+    } else {
+      istyping = {
+        'chatname': localStorage.getItem('chatname'),
+        'author': localStorage.getItem('username')
+      }
+      socket.emit("typing", istyping)
     }
   });
 
-  // TODO: add possibilty to add chats
-  // TODO: add that the user is scrolled down
+  document.querySelector('#addchatbutton').onclick = function () {
+    const chat_name = document.querySelector('#newchatname').value
+    if (chat_name) {
+      // Make sure the chat does not exist yet
+      if (document.querySelector('#' + chat_name)){
+        document.querySelector('#newchatname').style.backgroundColor = "red";
+      } else {
+        // Reset the input field
+        document.querySelector('#newchatname').value = ''
+        new_chat = {
+          'chatname': chat_name,
+          'author': localStorage.getItem('username')
+        }
+        socket.emit("add chat", {'chat': new_chat});
+        document.querySelector('#newchatname').style.backgroundColor = "white";
+      }
+    }
+  }
 
   // if the send button is clicked the new message is emitted to the websocket
   document.querySelector('#sendbutton').onclick = function () {
-    console.log("click")
     const chat_content = document.querySelector('#chatinput').value
     if (chat_content) {
       console.log(chat_content)
@@ -126,8 +153,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // if a new message is received it is added to the html via "add_message"
   socket.on('new message', data => {
+    console.log(data['chat'])
+    console.log(localStorage.getItem('chatname'))
+    if (data['chat'] == localStorage.getItem('chatname')){
       console.log(data['timestamp'])
       add_message(data['timestamp'], data['content'], data['author'])
+    }
   });
+
+  socket.on('new chat', data => {
+    const new_chat = document.createElement('a');
+    new_chat.className='chat'
+    new_chat.id = data['chatname']
+    new_chat.innerHTML = data['chatname'];
+    new_chat.href = '#';
+
+    document.querySelector('#lichatlist').appendChild(new_chat)
+    // call the function that adds the onclick listener to the chat buttons
+    add_display_link()
+  });
+
+  // TODO: add socket sender that sends info that the user is istyping
+
+
+  // TODO: add socket receiver that works out that the somebody is typing and resets the flag after 5 seconds of not receiving the flag
+  socket.on('user typing', data => {
+    if (data['chatname'] == localStorage.getItem('chatname')){
+      var istypingfield = document.querySelector('#istypingfield')
+      istypingfield.innerHTML = data['author'] + ' is typing...'
+      istypingfield.style.animationPlayState = 'running'
+      istypingfield.addEventListener('animationend', () => {
+        console.log("animation end reached")
+        istypingfield.innerHTML = ''
+        istypingfield.style.animationPlayState = 'initial'
+        var element = document.getElementById("element");
+        istypingfield.classList.remove("info");
+        void istypingfield.offsetWidth; // trigger a DOM reflow
+        istypingfield.classList.add("info");
+    })
+  }
+  })
 });
