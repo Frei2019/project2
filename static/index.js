@@ -155,10 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // if a new message is received it is added to the html via "add_message"
   socket.on('new message', data => {
-    console.log(data['chat'])
-    console.log(localStorage.getItem('chatname'))
     if (data['chat'] == localStorage.getItem('chatname')){
-      console.log(data['timestamp'])
       add_message(data['timestamp'], data['content'], data['author'])
     }
   });
@@ -175,10 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
     add_display_link()
   });
 
-  // TODO: add socket sender that sends info that the user is istyping
-
-
-  // TODO: add socket receiver that works out that the somebody is typing and resets the flag after 5 seconds of not receiving the flag
   socket.on('user typing', data => {
     if (data['chatname'] == localStorage.getItem('chatname')){
       var istypingfield = document.querySelector('#istypingfield')
